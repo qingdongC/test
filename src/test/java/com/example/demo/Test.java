@@ -1,9 +1,34 @@
 package com.example.demo;
 
 
+import com.alibaba.fastjson.support.odps.udf.CodecCheck;
+import com.example.demo.constant.Book;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+import net.bytebuddy.asm.Advice;
+import org.apache.http.client.utils.DateUtils;
+import org.apache.http.protocol.HTTP;
+import org.junit.Assert;
+import org.springframework.format.annotation.DateTimeFormat;
+import sun.net.www.http.HttpClient;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpSession;
+import javax.xml.transform.Source;
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.net.*;
 import java.nio.charset.Charset;
+import java.sql.SQLOutput;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * @Author: qingdong.chen
@@ -151,21 +176,19 @@ public class Test {
 
     @org.junit.Test
     public void test6() {
-        try {
-            InetAddress address = InetAddress.getByName("www.qq.com");
-            System.out.println(address.getHostName());
-            System.out.println(address.getHostAddress());
-            System.out.println("=========");
-            InetAddress address2 = InetAddress.getByName("10.0.84.153");
-            System.out.println(address2.getHostName());
-            System.out.println(address2.getHostAddress());
-            System.out.println("=====");
-            InetAddress localHost = InetAddress.getLocalHost();
-            System.out.println(localHost.getHostName());
-            System.out.println(localHost.getHostAddress());
-
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+        ArrayList<Object> lst = new ArrayList<>();
+        List lst1 = new ArrayList();
+        lst1.add("add");
+        lst1.add("art");
+        lst1.add("uio");
+        List lst2 = new ArrayList();
+        lst2.add("add2");
+        lst2.add("art2");
+        lst2.add("uio2");
+        lst.addAll(lst2);
+        lst.addAll(lst1);
+        for (Object s : lst) {
+            System.out.println(s);
         }
     }
 
@@ -215,4 +238,272 @@ public class Test {
         a[1] = 's';
         System.out.println(sChar);
     }
+
+    @org.junit.Test
+    public void test9() throws InterruptedException {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                for (int j = 0; j < 1000; j++) {
+                    stringBuffer.append("a");
+
+                }
+            }).start();
+        }
+        Thread.sleep(1000);
+        System.out.println(stringBuffer.length());
+    }
+
+    @org.junit.Test
+    public void test10() throws InterruptedException {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            new Thread(() -> {
+                for (int j = 0; j < 1000; j++) {
+                    stringBuilder.append("a");
+
+                }
+            }).start();
+        }
+        Thread.sleep(3000);
+        System.out.println(stringBuilder.length());
+    }
+
+    @org.junit.Test
+    public void test11() throws InterruptedException, IOException {
+        String s = "https://v2.zhaogang.com/#/channel?pageCode=_APP_sales_HDJCQD|||https://v2.zhaogang.com/#/channel?pageCode=_APP_sales_HDZBQD|||https://v2.zhaogang.com/#/channel?pageCode=_APP_sales_HDLDQD";
+
+        String[] split = s.split("\\|\\|\\|");
+        for (String s1 : split) {
+            System.out.println(s1);
+        }
+        URL url = new URL("https://www.baidu.com");
+
+    }
+
+    @org.junit.Test
+    public void name() {
+        int a = 0;
+        int c = 0;
+        for (int i = 0; i < 99; i++) {
+            a = a++;
+            c = a++;
+        }
+        System.out.println(a);
+        System.out.println(c);
+        int b = 0;
+        for (int i = 0; i < 99; i++) {
+            b = ++b;
+        }
+        System.out.println(b);
+    }
+
+    @org.junit.Test
+    public void name2() {
+        Book.inner inner = new Book().new inner();
+        inner.priant();
+        Book.staticinner staticinner = new Book.staticinner();
+        staticinner.priant();
+    }
+
+    private Book deal(Book a){
+        a = new Book();
+        a.setName("2222");
+        System.out.println("a:"+a);
+        return a;
+    }
+
+    @org.junit.Test
+    public void name3() {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("111");
+        list.add("222");
+        list.add("333");
+        String[] array = new String[4];
+        String[] array1 = list.toArray(array);
+
+        System.out.println(list);
+        System.out.println(array1[2]);
+        LinkedList<Object> objects = new LinkedList<>();
+        HashMap<Object, Object> hashMap = new HashMap<>();
+        Hashtable<Object, Object> hashtable = new Hashtable<>();
+        ConcurrentHashMap<Object, Object> concurrentHashMap = new ConcurrentHashMap<>();
+        Collections.synchronizedCollection(list);
+        Vector<Object> objects1 = new Vector<>();
+    }
+
+    @org.junit.Test
+    public void name4() {
+        int a = 8;// 111
+        int b = a >>1;//11
+        System.out.println(b);
+        int c = 1 << a;
+        System.out.println(c);
+        ArrayList<Object> list = new ArrayList<>(18);
+        System.out.println(list.size());
+    }
+
+    @org.junit.Test
+    public void name5() {
+        Set<Integer> set = new HashSet<>();
+        TreeSet<Integer> treeSet = new TreeSet<>();
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(3);
+        list.add(2);
+        list.add(1);
+        list.add(4);
+        Collections.sort(list);
+        System.out.println(list);
+        for (Integer s : list) {
+            System.out.println(s);
+        }
+        TreeMap<Object, Object> objectObjectTreeMap = new TreeMap<>();
+        LinkedHashMap<Object, Object> objectObjectLinkedHashMap = new LinkedHashMap<>();
+        LinkedHashSet<Object> objects = new LinkedHashSet<>();
+
+        Socket socket = new Socket();
+
+        Book<Object> book = new Book<>();
+        Class<? extends Book> aClass = book.getClass();
+        Field[] fields = aClass.getDeclaredFields();
+        System.out.println(fields.length);
+        for (Field field : fields) {
+            field.setAccessible(false);
+            System.out.println(field.getName());
+        }
+        try {
+            Method method = aClass.getMethod("getId");
+            System.out.println(method.invoke(book));
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @org.junit.Test
+    public void name6() {
+        CountDownLatch countDownLatch = new CountDownLatch(10);
+        for (int i = 0; i < 10; i++) {
+            int finalI = i;
+            new Thread(()->{
+                try {
+                    System.out.println(finalI +"：开始执行！");
+                    Thread.sleep(2000);
+                    System.out.println(finalI+"：执行结束！");
+                    countDownLatch.countDown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("主线程执行结束");
+    }
+
+    @org.junit.Test
+    public void name7() {
+        Semaphore semaphore = new Semaphore(2);
+        try {
+            for (int i = 0; i < 10; i++) {
+                semaphore.acquire();
+                int finalI = i;
+                new Thread(()->{
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println(finalI +"执行完成");
+                    semaphore.release();
+                }).start();
+
+            }
+            System.out.println("主线程执行完成");
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    @org.junit.Test
+    public void name8() {
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(8,16,10, TimeUnit.SECONDS,new LinkedBlockingDeque<>());
+        ArrayList<Future> futures = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            int finalI = i;
+            Future<String> future = threadPoolExecutor.submit(() ->{
+                Thread.sleep(2000);
+                return"1212"+ finalI;
+            });
+            futures.add(future);
+        }
+        for (Future future : futures) {
+            try {
+                System.out.println(future.get());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("执行完成");
+        myThread myThread = new myThread();
+        myThread.start();
+        try {
+            Thread.sleep(3000);
+
+//            myThread.stop=true;
+         myThread.interrupt();
+
+            Thread.sleep(3000);
+            System.out.println("结束");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private synchronized  void  deal(String ... args){
+        for (String arg : args) {
+            System.out.println(arg);
+        }
+    }
+
+    class myThread extends Thread{
+        private boolean stop = false;
+
+        @Override
+        public void run() {
+            while (!stop){
+                System.out.println(getName()+"开始执行");
+                try {
+                    Thread.yield();
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    stop = true;
+                }
+            }
+            System.out.println(getName()+"执行完成");
+        }
+    }
+
+    @org.junit.Test
+    public void name9() {
+        ConcurrentLinkedQueue queue = new ConcurrentLinkedQueue();
+        queue.peek();
+
+    }
+
+
+
+
 }
