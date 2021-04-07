@@ -1,31 +1,20 @@
 package com.example.demo;
 
-import com.example.demo.constant.AcLoan;
-import com.example.demo.constant.Book;
-import com.example.demo.constant.Color;
-import com.example.demo.constant.ListClass;
+import com.example.demo.dao.AcLoan;
+import com.example.demo.dao.Book;
+import com.example.demo.dao.ListClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.security.action.PutAllAction;
 
-import javax.sound.midi.Soundbank;
 import java.io.*;
 import java.math.BigDecimal;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.security.PublicKey;
-import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.regex.Pattern;
-
-import static java.lang.Enum.valueOf;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -51,7 +40,7 @@ public class DemoApplicationTests {
     public void test2(){
         ListClass<ArrayList> listListClass = new ListClass<ArrayList>();
         ListClass<LinkedList> listListClass1 = new ListClass<LinkedList>();
-
+        rep(1);
     }
 
     public void rep(int ... a){
@@ -62,7 +51,7 @@ public class DemoApplicationTests {
         }
 
     }
-    public int[] res(int ... a){
+    public int[] res(int[] a){
         return a;
     }
     @Test

@@ -1,4 +1,4 @@
-package com.example.demo.constant;
+package com.example.demo.dao;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
