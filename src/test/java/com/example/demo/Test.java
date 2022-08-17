@@ -2,12 +2,14 @@ package com.example.demo;
 
 
 import com.example.demo.dao.Book;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -365,6 +367,10 @@ public class Test {
 
     }
 
+    /**
+     * CountDownLatch能够使一个线程在等待另外一些线程完成各自工作之后，再继续执行。使用一个计数器进行实现。计数器初始值为线程的数量。
+     * 当每一个线程完成自己任务后，计数器的值就会减一。当计数器的值为0时，表示所有的线程都已经完成一些任务，然后在CountDownLatch上等待的线程就可以恢复执行接下来的任务
+     */
     @org.junit.Test
     public void name6() {
         CountDownLatch countDownLatch = new CountDownLatch(10);
@@ -484,7 +490,159 @@ public class Test {
 
     }
 
+    @org.junit.Test
+    public void name10() {
+        CountDownLatch startLatch = new CountDownLatch(1);
+        CountDownLatch endLatch = new CountDownLatch(3);
+        for (int i = 0; i < 3; i++) {
+            new Thread(() -> {
+                try {
+                    System.out.println("选手"+Thread.currentThread().getName()+ "正在等待裁判发布口令");
+                    startLatch.await();
+                    System.out.println("选手"+Thread.currentThread().getName()+ "已接受裁判口令");
+                    Thread.sleep(3000);
+                    System.out.println("选手"+Thread.currentThread().getName()+ "到达终点");
+                    endLatch.countDown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+
+        try {
+            Thread.sleep(2000);
+            System.out.println("裁判" + Thread.currentThread().getName()+"即将发布口令");
+            startLatch.countDown();
+            System.out.println("裁判" + Thread.currentThread().getName()+"口令已发出，正在等待选手到达终点");
+            endLatch.await();
+            System.out.println("所有选手到达终点");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @org.junit.Test
+    public void name11() {
+        System.out.println(Runtime.getRuntime().totalMemory());
+        System.out.println(Runtime.getRuntime().maxMemory());
+        System.out.println(Runtime.getRuntime().freeMemory());
+        int[] arr = new  int[2*1024*1024];  // 8388624   //4194320
+        System.out.println(Runtime.getRuntime().totalMemory());
+        System.out.println(Runtime.getRuntime().maxMemory());
+        System.out.println(Runtime.getRuntime().freeMemory());
+
+    }
+
+    @org.junit.Test
+    public void name12() {
+        Date date=new Date();
+
+        SimpleDateFormat format= new SimpleDateFormat("yyyy-MM-dd");
+
+//格式化当前日期
+
+//        try {
+//            weekDate = format.parse(date);
+//        }
+//        catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);  //美国是以周日为每周的第一天 现把周一设成第一天
+
+        calendar.setTime(date);
+
+        System.out.println("当前周为"+calendar.get(Calendar.WEEK_OF_YEAR));
+        System.out.println(calendar.get(Calendar.YEAR));
+        System.out.println(calendar.get(Calendar.MONTH)+1);
+    }
+
+    /**
+     * 字符串反转方法
+     * @param
+     * @return void
+     * @Author chenqingdong
+     * @Date 2022/8/8 10:02
+     **/
+    @org.junit.Test
+    public void name13() {
+        String str1 = "12345";
+        StringBuffer stringBuffer = new StringBuffer(str1);
+        StringBuffer reverse = stringBuffer.reverse();
+        System.out.println(reverse.toString());
+
+        String b = "";
+        char[] chars = str1.toCharArray();
+        for (int i = chars.length - 1; i >= 0; i--){
+            b = b + chars[i];
+        }
+        System.out.println(b);
+
+    }
+
+    @org.junit.Test
+    public void name14() {
+        Thread thread = new Thread();
+
+        System.out.println(thread.getName());
+        thread.start();
+        System.out.println(thread.getName());
+        Thread thread1 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName());
+            System.out.println(1111);
+        });
+        System.out.println(thread1.getName());
+        thread1.start();
+
+        ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(1);
+        System.out.println("开始");
+        scheduledThreadPoolExecutor.scheduleAtFixedRate(()-> System.out.println(11), 2,5,TimeUnit.SECONDS);
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @org.junit.Test
+    public void name15() {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        List<Future> list = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            int finalI = i;
+            Future<String> future = executorService.submit(()->
+                call(finalI +"")
+            );
+            list.add(future);
+        }
+
+        while (list.size() > 0){
+            System.out.println("list长度：" + list.size());
+            Iterator<Future> it = list.iterator();
+            while (it.hasNext()){
+                Future future = it.next();
+                if (future.isDone()){
+                    try {
+                        String s = (String) future.get();
+                        System.out.println(s);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                    it.remove();
+                }
+            }
 
 
+        }
 
+    }
+
+    private String call(String a){
+        return a+"c";
+    }
 }

@@ -7,4 +7,16 @@ package com.example.demo.service;
  */
 public class GcTest {
 
+    public void test1(){
+
+
+
+    }
+
+    public static void main(String[] args) {
+        new Thread(()->{
+            System.out.println("111");
+        }).start();
+    }
+
 }
