@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.service.FunctionBlankOrNoBlank;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.sql.SQLOutput;
@@ -12,7 +13,14 @@ import java.sql.SQLOutput;
  * @Date 2021/11/25 15:07
  * @Version 1.0.0
  */
+@Getter
 public class FunctionServiceImpl {
+
+    private int a;
+
+    public FunctionServiceImpl(int a){
+        this.a = a;
+    }
 
     public static FunctionBlankOrNoBlank deal(String message){
         return (consumer,runnable) ->{
@@ -24,6 +32,7 @@ public class FunctionServiceImpl {
             }
         };
     }
+
 
     public static void main(String[] args) {
         FunctionServiceImpl.deal("").doHandler((a)->{

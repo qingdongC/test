@@ -6,5 +6,6 @@ package com.example.demo.dao;
  * @Version 1.0
  */
 public interface DemoInterface {
+
     Book query(Integer id);
 }

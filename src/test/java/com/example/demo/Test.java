@@ -1,14 +1,18 @@
 package com.example.demo;
 
 
+import com.example.demo.dao.AcLoan;
 import com.example.demo.dao.Book;
+import com.example.demo.service.impl.FunctionServiceImpl;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
@@ -642,7 +646,118 @@ public class Test {
 
     }
 
+
     private String call(String a){
         return a+"c";
     }
+
+    @org.junit.Test
+    public void name16() {
+        double a = 3.4;
+        AcLoan loan = new AcLoan();
+        Thread thread = new Thread(() -> {
+
+
+            try {
+                synchronized (loan) {
+                    System.out.println(111);
+//                    loan.wait();
+                    Thread.sleep(5000);
+                    System.out.println(222);
+                }
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("aaa");
+
+        });
+
+        thread.start();
+        new Thread(()->{
+            System.out.println(3333);
+            synchronized (loan) {
+                loan.notify();
+                System.out.println(444);
+            }
+        }).start();
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("结束");
+
+    }
+
+    @org.junit.Test
+    public void name17() {
+        float a = (float) 3.14;
+        double b = 3.14;
+        System.out.println(a);
+        System.out.println(b);
+        System.out.println(0.1*3 == 0.3);
+        System.out.println(0.1*3);
+        System.out.println(0.3*1);
+        System.out.println(0.3);
+
+        Integer i1 = 126,i2 = 126,i3 = -128,i4=-128 ;
+        System.out.println(i1==i2);
+        System.out.println(i1.equals(i2));
+        System.out.println(i3==i4);
+        System.out.println(i3.equals(i4));
+        Integer arr[] = new Integer[256];
+        int j = -128;
+        for (int i = 0; i < 256; i++) {
+            arr[i] = new Integer(j++);
+            System.out.println(arr[i]);
+        }
+        System.out.println(arr);
+        System.out.println(arr[255]);
+        Integer j5 = Integer.valueOf(5);
+
+        Locale locale = Locale.getDefault();
+        System.out.println(locale);
+        final AcLoan loan1 = new AcLoan();
+
+    }
+
+    @org.junit.Test
+    public void name18() {
+        System.out.println("开始");
+        ok: for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 10; j++) {
+                System.out.println("i："+ i +"，j：" +j);
+                if (j == 5) {
+                    break ok;
+                }
+            }
+
+        }
+        System.out.println("结束");
+    }
+
+    @org.junit.Test
+    public void name19() {
+        int a = 1;
+        test111(a);
+        System.out.println(a);
+    }
+
+    private void test111(int a) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < a; i++) {
+             a++;
+        }
+    }
+
+    @org.junit.Test
+    public void name20() {
+       new Thread(()-> {
+           System.out.println("hello world");
+       }).start();
+        Thread thread = new Thread(()-> {System.out.println("hello world");});
+        thread.start();
+    }
+
 }
